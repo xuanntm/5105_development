@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from src.service.text_extraction_service import extract_pdf_from_url, extract_sentences
+from src.model.esg_models import db, EsgBenchmark
+from src.service.text_extraction_service import esg_dowload_extract_save
 from src.service.yfinance_service import fetch_and_plot_esg_scores
 from src.service.realtime_news_service import run_esg_news_monitoring
 from src.service.sentiment_analysis_service import process_esg_reports
@@ -8,8 +8,8 @@ from src.service.sentiment_analysis_service import process_esg_reports
 from src.service.confidence_service import calculate_confidence_scores
 from src.service.training_service import load_esg_model
 from src.config.app_config import SQLALCHEMY_DATABASE_URI
-from src.config.benchmark_config import db_load
-from src.model.esg_models import db, ReportHistory
+# from src.config.benchmark_config import db_load
+
 import os, json
 from IPython.display import display
 # API connection
@@ -35,7 +35,9 @@ db.init_app(app)
 
 # # Inside your app context
 with app.app_context():
-    db_load()
+    benchmark_topics = db.session.query(EsgBenchmark.disclosure_topic).distinct().all()
+    benchmark_topics = [topic[0] for topic in benchmark_topics]  # Convert to a flat list
+#     db_load()
 #     db.create_all()  # This will create the Item table
 
 # @app.route('/items', methods=['GET'])
@@ -72,6 +74,10 @@ def esg_input():
 
     # Step 1.1: Download report from internet and extract to text
     print(f"📥 Processing ESG report: {company_name} {report_year}")
+    # message = esg_dowload_extract_save(report_url=report_url, company_name=company_name, report_year=report_year)
+    # print(f'esg_dowload_extract_save:{message}')
+
+
     # raw_text = extract_pdf_from_url(report_url)
     # report_pages, report_sentences = extract_sentences(raw_text)
     # print(raw_text)
@@ -90,7 +96,7 @@ def esg_input():
     #                          year=report_year,
     #                          company_name=company_name, 
     #                          url=report_url, 
-    #                          file_report_location=json_extract_path, 
+    #                          file_report_location=None, 
     #                          esg_content= raw_text,
     #                          report_pages=report_pages,
     #                          report_sentences=report_sentences)  # Ensure 'name' corresponds to your model
@@ -101,14 +107,14 @@ def esg_input():
 
     # # Step 2: fetch yahoo finance data
     # esg_scores = fetch_and_plot_esg_scores(company_name)
+    # print(esg_scores)
 
     # # Step 3: fetch ESG news
     # df = run_esg_news_monitoring(company_name)
     # display(df.head())
 
     # # Step 4: process ESG report with output from Step 1.2
-    # extracted_files = [json_extract_path]
-    df = process_esg_reports(company_name, report_year)
+    df = process_esg_reports(company_name, report_year, benchmark_topics)
     # Step 5: process Sentiment data with output from Step 4
     # process_sentiment_data(company_name, report_year)
 

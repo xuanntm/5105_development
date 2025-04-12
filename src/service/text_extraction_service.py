@@ -1,5 +1,6 @@
 import requests
 import io
+import uuid
 import re
 import json
 import string
@@ -9,6 +10,7 @@ import spacy
 import os
 from langdetect import detect
 from googletrans import Translator
+from src.model.esg_models import db, ReportHistory
 
 # spacy.cli.download("en_core_web_sm")
 # nlp = spacy.load("en_core_web_sm", disable=['ner']) # using later 
@@ -110,3 +112,20 @@ def extract_sentences(text):
                         })
 
     return paragraphs, sentences
+
+
+def esg_dowload_extract_save(report_url, company_name, report_year):
+    raw_text = extract_pdf_from_url(report_url)
+    report_pages, report_sentences = extract_sentences(raw_text)
+    new_item = ReportHistory(history_id=uuid.uuid4(),
+                             company_code=company_name[:10], #"TestCode", 
+                             year=report_year,
+                             company_name=company_name, 
+                             url=report_url, 
+                             file_report_location=None, 
+                             esg_content= raw_text,
+                             report_pages=report_pages,
+                             report_sentences=report_sentences)  # Ensure 'name' corresponds to your model
+    db.session.add(new_item)
+    db.session.commit()
+    return "Successful"

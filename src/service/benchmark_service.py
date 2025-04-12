@@ -1,22 +1,16 @@
-from src.config.benchmark_config import benchmark_topics
-
-# def match_to_benchmark_topic(text, benchmark_topics):
-def match_to_benchmark_topic(text):
+def match_to_benchmark_topic(text, benchmark_topics):
     text = text.lower()
-    print(benchmark_topics)
     matches = [topic for topic in benchmark_topics if topic in text]
     return matches[0] if matches else "Unaligned"
 
-# def detect_greenwashing_advanced(row, benchmark_topics):
-def detect_greenwashing_advanced(row):
+def detect_greenwashing_advanced(row, benchmark_topics):
     text = row['Text Snippet'].lower()
     sentiment = row['Sentiment Label'].lower()
     score = row['Sentiment Score']
     has_number = any(char.isdigit() for char in text)
 
     # Match benchmark
-    # matched_topic = match_to_benchmark_topic(text, benchmark_topics)
-    matched_topic = match_to_benchmark_topic(text)
+    matched_topic = match_to_benchmark_topic(text, benchmark_topics)
 
     # Buzzwords to look for
     buzzwords = ["green", "eco", "sustainable", "net zero", "inclusive", "carbon neutral", "ethical"]

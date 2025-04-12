@@ -119,7 +119,8 @@ def classify_esg_category(text):
     return "Uncategorized"
 
 # ESG JSON processor
-def process_esg_reports(company, year):
+def process_esg_reports(company, year, benchmark_topics):
+    print(benchmark_topics)
     # file_paths = os.path.join(DATA_FOLDER_JSON, f"{company_name}{report_year}.json")
     results = []
     # print(f'file_paths:{file_paths}')
@@ -169,7 +170,7 @@ def process_esg_reports(company, year):
             "Sentiment Label": label,
             "Sentiment Score": score,
             "Text Snippet": short_text[:150] + "..."
-        })
+        }, benchmark_topics)
 
         new_item = EsgSentiment(year=year,
                          company=company, 

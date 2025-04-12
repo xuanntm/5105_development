@@ -1,8 +1,9 @@
 from typing import Optional
 
-from sqlalchemy import Column, DateTime, Integer, JSON, PrimaryKeyConstraint, REAL, Sequence, String, Table, Text, UniqueConstraint, text
+from sqlalchemy import Column, DateTime, Integer, JSON, PrimaryKeyConstraint, REAL, Sequence, String, Table, Text, UniqueConstraint, Uuid, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 import datetime
+import uuid
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -131,7 +132,7 @@ class ReportHistory(db.Model):
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    history_id: Mapped[str] = mapped_column(String(20))
+    history_id: Mapped[uuid.UUID] = mapped_column(Uuid)
     company_code: Mapped[Optional[str]] = mapped_column(String(10))
     year: Mapped[Optional[int]] = mapped_column(Integer)
     company_name: Mapped[Optional[str]] = mapped_column(String(100))
