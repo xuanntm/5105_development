@@ -114,7 +114,7 @@ def extract_sentences(text):
     return paragraphs, sentences
 
 
-def esg_dowload_extract_save(report_url, company_name, report_year):
+def esg_download_extract_save(report_url, company_name, report_year):
     raw_text = extract_pdf_from_url(report_url)
     report_pages, report_sentences = extract_sentences(raw_text)
     new_item = ReportHistory(history_id=uuid.uuid4(),
