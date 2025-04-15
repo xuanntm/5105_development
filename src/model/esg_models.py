@@ -231,16 +231,24 @@ class EsgBenchmark(db.Model):
     created_date: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
 
 
-t_esg_extracted_metric_data = Table(
-    'esg_extracted_metric_data', Base.metadata,
-    Column('history_id', String(20)),
-    Column('esg_id', String(20)),
-    Column('esg_value', String(100)),
-    Column('created_date', DateTime, server_default=text('CURRENT_TIMESTAMP')),
-    Column('company_name', String(100)),
-    Column('year', Integer),
-    schema='esg'
-)
+class EsgExtractedMetricData(Base):
+    __tablename__ = 'esg_extracted_metric_data'
+    __table_args__ = (
+        PrimaryKeyConstraint('id', name='esg_extracted_metric_data_pkey'),
+        {}
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    company_name: Mapped[Optional[str]] = mapped_column(String(100))
+    year: Mapped[Optional[int]] = mapped_column(Integer)
+    history_id: Mapped[Optional[str]] = mapped_column(String(50))
+    pillar: Mapped[Optional[str]] = mapped_column(String(50))
+    metric: Mapped[Optional[str]] = mapped_column(String(128))
+    extracted_metric: Mapped[Optional[str]] = mapped_column(String(512))
+    extracted_value: Mapped[Optional[str]] = mapped_column(String(50))
+    esg_id: Mapped[Optional[str]] = mapped_column(String(20))
+    created_date: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
+
 
 
 class EsgIndexMetric(db.Model):
