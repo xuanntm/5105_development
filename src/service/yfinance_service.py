@@ -136,17 +136,18 @@ def plot_esg_horizontal_chart(company_name, esg_scores):
     return fig
 
 def fetch_and_plot_esg_scores(company_name):
-    esg_scores = get_esg_score(company_name)
-    if esg_scores is not None:
-        display(esg_scores)
-        # plot_esg_horizontal_chart(company_name, esg_scores)
-        new_item = ExternalSource(esg_source="yahoo",
-                             company_code="TestCode",
-                             company_name=company_name, 
-                             description="from Yahoo Fiancial", 
-                             json_content=json.loads(esg_scores.to_json())['COP'])
-        db.session.add(new_item)
-        db.session.commit()
-
-
-    return esg_scores
+    try:
+        esg_scores = get_esg_score(company_name)
+        if esg_scores is not None:
+            display(esg_scores)
+            # plot_esg_horizontal_chart(company_name, esg_scores)
+            new_item = ExternalSource(esg_source="yahoo",
+                                company_code="TestCode",
+                                company_name=company_name, 
+                                description="from Yahoo Fiancial", 
+                                json_content=json.loads(esg_scores.to_json())['COP'])
+            db.session.add(new_item)
+            db.session.commit()
+        return esg_scores
+    except Exception as e:
+        print(f'fetch_and_plot_esg_scores fail for {company_name}')

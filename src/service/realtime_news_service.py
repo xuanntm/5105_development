@@ -80,31 +80,34 @@ def analyze_articles(articles, source_name):
 
 # === Main Runner ===
 def run_esg_news_monitoring(company_name):
-    query = (
-        f'"{company_name}" AND '
-        f'(sustainability OR ESG OR emissions OR net-zero OR climate OR carbon OR environment OR governance OR diversity)'
-    )
-    from_date = (datetime.today() - timedelta(days=7)).strftime("%Y-%m-%d")
+    try:
+        query = (
+            f'"{company_name}" AND '
+            f'(sustainability OR ESG OR emissions OR net-zero OR climate OR carbon OR environment OR governance OR diversity)'
+        )
+        from_date = (datetime.today() - timedelta(days=7)).strftime("%Y-%m-%d")
 
-    newsapi_articles = fetch_newsapi_articles(query, from_date)
-    bing_articles = fetch_bing_articles(query)
+        newsapi_articles = fetch_newsapi_articles(query, from_date)
+        bing_articles = fetch_bing_articles(query)
 
-    combined = analyze_articles(newsapi_articles, "NewsAPI") + analyze_articles(bing_articles, "Bing")
-    df = pd.DataFrame(combined)
-    display(df.head())
-    df.sort_values("Published", ascending=False, inplace=True)
-    # df.to_csv(f"{DATA_FOLDER_NEWS}esg_news_{company_name.lower()}.csv", index=False)
-    for index, row in df.iterrows():
-        new_item = EsgNews(company=company_name, 
-                        news_source=row['Source'], 
-                        news_title=row['Title'],
-                        description=row['Description'],
-                        sentiment_label=row['Sentiment Label'],
-                        sentiment_score=row['Sentiment Score'],
-                        esg_category=row['ESG Category'],
-                        url=row['URL'],
-                        published_date=row['Published'])
-        db.session.add(new_item)
-        db.session.commit()
+        combined = analyze_articles(newsapi_articles, "NewsAPI") + analyze_articles(bing_articles, "Bing")
+        df = pd.DataFrame(combined)
+        display(df.head())
+        df.sort_values("Published", ascending=False, inplace=True)
+        # df.to_csv(f"{DATA_FOLDER_NEWS}esg_news_{company_name.lower()}.csv", index=False)
+        for index, row in df.iterrows():
+            new_item = EsgNews(company=company_name, 
+                            news_source=row['Source'], 
+                            news_title=row['Title'],
+                            description=row['Description'],
+                            sentiment_label=row['Sentiment Label'],
+                            sentiment_score=row['Sentiment Score'],
+                            esg_category=row['ESG Category'],
+                            url=row['URL'],
+                            published_date=row['Published'])
+            db.session.add(new_item)
+            db.session.commit()
 
-    return df
+        return df
+    except Exception as e:
+        print(f'run_esg_news_monitoring fail for {company_name}')

@@ -115,17 +115,20 @@ def extract_sentences(text):
 
 
 def esg_download_extract_save(report_url, company_name, report_year):
-    raw_text = extract_pdf_from_url(report_url)
-    report_pages, report_sentences = extract_sentences(raw_text)
-    new_item = ReportHistory(history_id=uuid.uuid4(),
-                             company_code=company_name[:10], #"TestCode", 
-                             year=report_year,
-                             company_name=company_name, 
-                             url=report_url, 
-                             file_report_location=None, 
-                             esg_content= raw_text,
-                             report_pages=report_pages,
-                             report_sentences=report_sentences)  # Ensure 'name' corresponds to your model
-    db.session.add(new_item)
-    db.session.commit()
-    return "Successful"
+    try:
+        raw_text = extract_pdf_from_url(report_url)
+        report_pages, report_sentences = extract_sentences(raw_text)
+        new_item = ReportHistory(history_id=uuid.uuid4(),
+                                company_code=company_name[:10], #"TestCode", 
+                                year=report_year,
+                                company_name=company_name, 
+                                url=report_url, 
+                                file_report_location=None, 
+                                esg_content= raw_text,
+                                report_pages=report_pages,
+                                report_sentences=report_sentences)  # Ensure 'name' corresponds to your model
+        db.session.add(new_item)
+        db.session.commit()
+        return "Successful"
+    except Exception as e:
+        print(f'process_esg_reports fail for {company_name} {report_year}')

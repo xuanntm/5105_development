@@ -48,19 +48,21 @@ def esg_input():
     message = esg_download_extract_save(report_url=report_url, company_name=company_name, report_year=report_year)
     # print(f'esg_dowload_extract_save:{message}')
 
-    # # Step 2: fetch yahoo finance data
+    # Step 2: fetch yahoo finance data
     esg_scores = fetch_and_plot_esg_scores(company_name)
     # print(esg_scores)
 
-    # # Step 3: fetch ESG news
+    # Step 3: fetch ESG news
     df = run_esg_news_monitoring(company_name)
     # display(df.head())
 
-    # # Step 4: process ESG report with output from Step 1
+    # Step 4: process ESG report with output from Step 1
     df = process_esg_reports(company_name, report_year, benchmark_topics)
 
     # Step 5: check confidence score
     calculate_confidence_scores(company_name, report_year)    
+
+    # Step 6: ??? Training
     load_esg_model(company_name, report_year)
 
     return jsonify({'message': 'successful'}), 200

@@ -126,51 +126,54 @@ metric_dictionary = {
 }
 
 def calculate_confidence_scores(company_name, report_year):
-    data = db.session.query(EsgExtractedMetricData).with_entities(
-        EsgExtractedMetricData.pillar,
-        EsgExtractedMetricData.metric,
-        EsgExtractedMetricData.extracted_metric,
-        EsgExtractedMetricData.extracted_value
-    ).filter_by(company_name=company_name, year=report_year).all()
+    try:
+        data = db.session.query(EsgExtractedMetricData).with_entities(
+            EsgExtractedMetricData.pillar,
+            EsgExtractedMetricData.metric,
+            EsgExtractedMetricData.extracted_metric,
+            EsgExtractedMetricData.extracted_value
+        ).filter_by(company_name=company_name, year=report_year).all()
 
-    metrics = [{
-        'Metric': row.metric, 
-        'Extracted Metric': row.extracted_metric, 
-        'extracted_value': row.extracted_value
-    }for row in data]
-    
-    df = pd.DataFrame(metrics)
-    print(df)
+        metrics = [{
+            'Metric': row.metric, 
+            'Extracted Metric': row.extracted_metric, 
+            'extracted_value': row.extracted_value
+        }for row in data]
+        
+        df = pd.DataFrame(metrics)
+        print(df)
 
-    results = []
-    for idx, row in df.iterrows():
-        metric = str(row.get('Metric', '')).strip()
-        extracted = str(row.get('Extracted Metric', '')).strip()
-        if metric and extracted:
-            base_embedding = confidence_model.encode(extracted.lower(), convert_to_tensor=True)
+        results = []
+        for idx, row in df.iterrows():
+            metric = str(row.get('Metric', '')).strip()
+            extracted = str(row.get('Extracted Metric', '')).strip()
+            if metric and extracted:
+                base_embedding = confidence_model.encode(extracted.lower(), convert_to_tensor=True)
 
-            aliases = metric_dictionary.get(metric, [metric])
-            best_score = -1
-            best_alias = None
+                aliases = metric_dictionary.get(metric, [metric])
+                best_score = -1
+                best_alias = None
 
-            for alias in aliases:
-                alias_embedding = confidence_model.encode(alias.lower(), convert_to_tensor=True)
-                score = float(util.cos_sim(base_embedding, alias_embedding).item())
-                if score > best_score:
-                    best_score = score
-                    best_alias = alias
+                for alias in aliases:
+                    alias_embedding = confidence_model.encode(alias.lower(), convert_to_tensor=True)
+                    score = float(util.cos_sim(base_embedding, alias_embedding).item())
+                    if score > best_score:
+                        best_score = score
+                        best_alias = alias
 
-            results.append({
-                "Metric": metric,
-                "Best_Matching_Alias": best_alias,
-                "Extracted_Metric": extracted,
-                "Confidence_Score": round(best_score, 3),
-                "Needs_Human_Review": best_score < 0.75
-            })
+                results.append({
+                    "Metric": metric,
+                    "Best_Matching_Alias": best_alias,
+                    "Extracted_Metric": extracted,
+                    "Confidence_Score": round(best_score, 3),
+                    "Needs_Human_Review": best_score < 0.75
+                })
 
-    confidence_df = pd.DataFrame(results)
-    # print(confidence_df)
-    mean_score = confidence_df["Confidence_Score"].mean()
-    print(f"\n📈 Mean Confidence Score: {round(mean_score, 3)}")
-    return df
+        confidence_df = pd.DataFrame(results)
+        # print(confidence_df)
+        mean_score = confidence_df["Confidence_Score"].mean()
+        print(f"\n📈 Mean Confidence Score: {round(mean_score, 3)}")
+        return df
+    except Exception as e:
+        print(f'calculate_confidence_scores fail for {company_name} {report_year}')
 
