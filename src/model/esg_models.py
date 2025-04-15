@@ -17,7 +17,7 @@ class BEsgActualScore(db.Model):
     __tablename__ = 'b_esg_actual_score'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='b_esg_actual_score_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -37,7 +37,7 @@ class BEsgClusterAnalyisActual(db.Model):
     __tablename__ = 'b_esg_cluster_analyis_actual'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='b_esg_cluster_analyis_actual_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -58,7 +58,7 @@ class BEsgClusterAnalyisActualDemo(db.Model):
     __tablename__ = 'b_esg_cluster_analyis_actual_demo'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='b_esg_cluster_analyis_actual_demo_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -78,7 +78,7 @@ class BEsgFinancialMetrics(db.Model):
     __tablename__ = 'b_esg_financial_metrics'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='b_esg_financial_metrics_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -95,7 +95,7 @@ class BEsgMergedFinancialMetrics(db.Model):
     __tablename__ = 'b_esg_merged_financial_metrics'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='b_esg_merged_financial_metrics_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -117,7 +117,7 @@ class BEsgMetricDataExtracted(db.Model):
     __tablename__ = 'b_esg_metric_data_extracted'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='b_esg_metric_data_extracted_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -164,7 +164,7 @@ class BEsgWithTrendFeatures(db.Model):
     __tablename__ = 'b_esg_with_trend_features'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='b_esg_with_trend_features_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -186,7 +186,7 @@ class CompanyEsgScores(db.Model):
     __tablename__ = 'company_esg_scores'
     __table_args__ = (
         PrimaryKeyConstraint('company_name', 'year', name='company_esg_scores_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     company_name: Mapped[str] = mapped_column(String(255), primary_key=True)
@@ -205,7 +205,7 @@ class CompanyProfile(db.Model):
     __table_args__ = (
         PrimaryKeyConstraint('id', name='company_profile_pkey'),
         UniqueConstraint('companycode', name='unique_company_code'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, Sequence('company_profile_company_id_seq', schema='esg'), primary_key=True)
@@ -219,7 +219,7 @@ class EsgBenchmark(db.Model):
     __tablename__ = 'esg_benchmark'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='esg_benchmark_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -247,7 +247,7 @@ class EsgIndexMetric(db.Model):
     __tablename__ = 'esg_index_metric'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='esg_index_metric_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -261,7 +261,7 @@ class EsgNews(db.Model):
     __tablename__ = 'esg_news'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='esg_news_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -282,7 +282,7 @@ class EsgSentiment(db.Model):
     __tablename__ = 'esg_sentiment'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='esg_sentiment_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -301,7 +301,7 @@ class ExternalSource(db.Model):
     __tablename__ = 'external_source'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='external_source_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -318,7 +318,7 @@ class ReportHistory(db.Model):
     __tablename__ = 'report_history'
     __table_args__ = (
         PrimaryKeyConstraint('id', name='report_history_pkey'),
-        {'schema': 'esg'}
+        {}
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
