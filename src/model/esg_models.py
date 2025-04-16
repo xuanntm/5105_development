@@ -339,4 +339,5 @@ class ReportHistory(db.Model):
     esg_content: Mapped[Optional[str]] = mapped_column(Text)
     report_pages: Mapped[Optional[dict]] = mapped_column(JSON)
     report_sentences: Mapped[Optional[dict]] = mapped_column(JSON)
+    confidence_score: Mapped[Optional[float]] = mapped_column(REAL)
     created_date: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime, server_default=text('CURRENT_TIMESTAMP'))

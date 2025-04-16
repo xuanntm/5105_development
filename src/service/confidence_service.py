@@ -1,7 +1,7 @@
 import pandas as pd
 from src.config.confidence_config import confidence_model
 from sentence_transformers import SentenceTransformer, util
-from src.model.esg_models import db, EsgExtractedMetricData
+from src.model.esg_models import db, EsgExtractedMetricData, ReportHistory
 
 # Load the SentenceTransformer model
 confidence_model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -172,6 +172,10 @@ def calculate_confidence_scores(company_name, report_year):
         confidence_df = pd.DataFrame(results)
         # print(confidence_df)
         mean_score = confidence_df["Confidence_Score"].mean()
+        record = ReportHistory.query.filter_by(company_name=company_name, year=report_year) \
+            .order_by(ReportHistory.created_date.desc()).first()
+        record.confidence_score = mean_score
+        db.session.commit()
         print(f"\n📈 Mean Confidence Score: {round(mean_score, 3)}")
         return df
     except Exception as e:
