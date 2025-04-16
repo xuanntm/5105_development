@@ -9,7 +9,7 @@ from src.service.training_service import load_esg_model
 from src.config.app_config import SQLALCHEMY_DATABASE_URI
 from src.service.esg_score_service import load_all_data
 from src.service.cluster_service import run_clustering
-from src.service.util_service import get_company_list
+from src.service.util_service import get_company_list, get_esg_financial_metric, get_esg_report_histopry
 
 # API connection
 app = Flask(__name__)
@@ -86,9 +86,21 @@ def esg_score():
     run_clustering(df)
     return jsonify(output), 200
 
+
 @app.route('/api/v1/esg/company', methods=['GET'])
 def retrieve_company_list():
     return get_company_list(), 200
+
+
+@app.route('/api/v1/esg/financial-metric', methods=['GET'])
+def retrieve_esg_financial_metric():
+    return get_esg_financial_metric(), 200
+
+
+@app.route('/api/v1/esg/report-history', methods=['GET'])
+def retrieve_esg_report_histopry():
+    return get_esg_report_histopry(), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
