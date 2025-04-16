@@ -18,7 +18,8 @@ move to the folder where you want to work
 > 5. Download model  
 > $ python src/config/model_config.py
 > 6. Start environment  
-> $ python backend_app.py
+> $ python backend_app.py  
+> Backend endpoint : http://localhost:5000/
 > 7. 
 ## 2.Install DB or create DB from script.
 > 1. Dictionary table  
@@ -34,7 +35,9 @@ move to the folder where you want to work
 ## 2.Run app
 ## 3.Call internal API
 ## 4.Build docker file
-## 5.Run app and call 
+## 5.Run Streamlit UI app
+> $ streamlit run frontend_app.py  
+> Frontend endpoint : http://localhost:8501/
 
 docker build -t my-python-app .
 
