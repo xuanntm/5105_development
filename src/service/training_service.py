@@ -48,4 +48,5 @@ def load_esg_model(company_name, report_year):
         model.save("energy_esg_adapted_model")
         print("Model fine-tuned and saved!")
     except Exception as e:
+        print(str(e))
         print(f'load_esg_model fail for {company_name} {report_year}')

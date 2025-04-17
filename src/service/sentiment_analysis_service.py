@@ -166,5 +166,6 @@ def process_esg_reports(company, year, benchmark_topics):
 
         return 'Successful'
     except Exception as e:
+        print(str(e))
         print(f'process_esg_reports fail for {company} {year}')
     

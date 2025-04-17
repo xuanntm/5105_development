@@ -150,4 +150,5 @@ def fetch_and_plot_esg_scores(company_name):
             db.session.commit()
         return esg_scores
     except Exception as e:
+        print(str(e))
         print(f'fetch_and_plot_esg_scores fail for {company_name}')

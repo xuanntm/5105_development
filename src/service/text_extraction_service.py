@@ -131,4 +131,5 @@ def esg_download_extract_save(report_url, company_name, report_year):
         db.session.commit()
         return "Successful"
     except Exception as e:
+        print(str(e))
         print(f'process_esg_reports fail for {company_name} {report_year}')

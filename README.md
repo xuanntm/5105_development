@@ -31,21 +31,20 @@ move to the folder where you want to work
 > b_esg_merged_financial_metrics  
 > b_esg_metric_data_extracted  
 > b_esg_with_trend_features  
-> 2. 
-## 2.Run app
-## 3.Call internal API
-## 4.Build docker file
+
 ## 5.Run Streamlit UI app
 > $ streamlit run frontend_app.py  
 > Frontend endpoint : http://localhost:8501/
 
-docker build -t my-python-app .
 
-docker build -t my-python-app:latest .
-docker run -p 5000:5000 my-python-app
+## 6. switch db local <--> neondb
 
+step to update DB endpoint:
+- Stop current service (if it's running) : Ctrl+C
+- update .env with new value for SQLALCHEMY_DATABASE_URI
+- clean up cache $ unset SQLALCHEMY_DATABASE_URI
+- start backend app $ python backend_app.py
 
-## 6.
 
 pip install sqlacodegen
 sqlacodegen postgresql://username:password@localhost:5432/mydatabase --outfile models.py
@@ -77,8 +76,17 @@ db = SQLAlchemy()
 docker rmi $(docker images -q my-python-app --filter "dangling=false" --filter "label!=keep") 2>/dev/null
 
 
+docker build -t my-python-app .
+
+docker build -t my-python-app:latest .
+docker run -p 5000:5000 my-python-app
 
 
+
+
+## 2.Run app
+## 3.Call internal API
+## 4.Build docker file
 
 # Calculate sentiment stats -> redundant?
 

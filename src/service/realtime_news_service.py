@@ -110,4 +110,5 @@ def run_esg_news_monitoring(company_name):
 
         return df
     except Exception as e:
+        print(str(e))
         print(f'run_esg_news_monitoring fail for {company_name}')

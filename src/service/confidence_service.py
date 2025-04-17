@@ -179,5 +179,6 @@ def calculate_confidence_scores(company_name, report_year):
         print(f"\n📈 Mean Confidence Score: {round(mean_score, 3)}")
         return df
     except Exception as e:
+        print(str(e))
         print(f'calculate_confidence_scores fail for {company_name} {report_year}')
 
