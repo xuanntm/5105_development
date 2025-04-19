@@ -1,3 +1,57 @@
+🧠 Automating ESG Insights: Data Extraction and Performance Analysis
+
+DSS5105 — Data Science Projects in Practice
+
+Semester 2, AY2024/25
+
+⸻
+
+📘 Project Overview
+
+This project aims to automate the extraction of ESG (Environmental, Social, Governance) insights from unstructured company reports using advanced NLP techniques, and provide performance analysis based on industry benchmarks. The system supports ESG analysts, investors, and regulators by making ESG data extraction faster, more reliable, and more actionable.
+
+
+
+
+
+
+🧾 Data Sources
+	•	SGX ESG Disclosure Metrics
+	•	Corporate ESG/Sustainability Reports
+	•	Bloomberg / Sustainalytics / CDP ESG Scores
+	•	Global Reporting Initiative (GRI)
+
+
+
+
+🧪 Data Preparation
+	•	Input Data: ESG Reports, Financial Data, ESG Ratings
+	•	Preprocessing: Cleaning, tokenization, annotation
+	•	Normalization: Loaded into the ESG_Indicators SQL table for flexible analysis
+
+⸻
+
+
+🚀 Features
+	•	NLP-based ESG data extraction
+	•	ESG scoring aligned with SGX metrics
+	•	Financial correlation analysis (ROA, ROE, stock return)
+	•	Industry benchmarking
+	•	API serving key ESG insights
+
+ 📈 Goals & Impact
+	•	Streamline ESG data extraction from unstructured text
+	•	Improve consistency and transparency in ESG scoring
+	•	Support investor and regulator decision-making
+	•	Enhance corporate sustainability strategy development
+
+.env file
+
+
+
+
+
+
 # What we do
 prerequisite thi
 
