@@ -69,7 +69,7 @@ Project Structure
 
 >1. Clone the Repository
 
->2.  Create and Activate a Virtual Environment
+>2. Create and Activate a Virtual Environment
       >Create
       python -m venv .venv
 
@@ -86,6 +86,6 @@ Project Structure
    ✅ Ensure .env is listed in .gitignore to prevent accidental commits.
 
 >5. Run the Streamlit App
-  cd UI
-  streamlit run login.py
+       >cd UI
+       >streamlit run login.py
 
