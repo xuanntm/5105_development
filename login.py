@@ -12,7 +12,7 @@ import os
 st.set_page_config(page_title="CTRL+Sustain ESG Dashboard", page_icon="🌱", layout="wide")
 
 # ------------------------ DB CONNECTION ------------------------ #
-DB_URL = "postgresql://neondb_owner:npg_tL3JWKDvG6Fh@ep-morning-dew-a1l6446x-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
+DB_URL = os.getenv('DATABASE_URL')
 
 def get_neon_connection():
     return psycopg2.connect(DB_URL)
