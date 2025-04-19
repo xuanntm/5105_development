@@ -294,60 +294,64 @@ def load_all_data(year=2023):
     Returns:
     tuple: (DataFrame with ESG scores, List of inserted record metadata)
     """
-    # === Step 1: Retrieve all raw ESG metric data from the database ===
-    data = db.session.query(BEsgMetricDataExtracted).all()
-    
-    # === Step 2: Convert SQLAlchemy ORM objects to dictionaries, then to a DataFrame ===
-    data_dicts = [item.__dict__ for item in data]  # Convert each item to a dictionary
-    df = pd.DataFrame(data_dicts)
+    try:
+        # === Step 1: Retrieve all raw ESG metric data from the database ===
+        data = db.session.query(BEsgMetricDataExtracted).filter_by(Year= year).all()
+        if not data:  # Check if data is an empty list
+            print('No Data on DB')
+            return None, None
+        # === Step 2: Convert SQLAlchemy ORM objects to dictionaries, then to a DataFrame ===
+        data_dicts = [item.__dict__ for item in data]  # Convert each item to a dictionary
+        df = pd.DataFrame(data_dicts)
 
-    # === Step 3: Compute ESG Sub-Scores and Final Score ===
-    df = calculate_environmental_score(df)
-    df = calculate_social_score(df)
-    df = calculate_governance_score(df)
-    df = calculate_final_esg_score(df, year)
+        # === Step 3: Compute ESG Sub-Scores and Final Score ===
+        df = calculate_environmental_score(df)
+        df = calculate_social_score(df)
+        df = calculate_governance_score(df)
+        df = calculate_final_esg_score(df, year)
 
-    # === Step 4: Remove internal SQLAlchemy state from the DataFrame if present ===
-    if '_sa_instance_state' in df:
-        df.drop(columns=['_sa_instance_state'], inplace=True)
+        # === Step 4: Remove internal SQLAlchemy state from the DataFrame if present ===
+        if '_sa_instance_state' in df:
+            df.drop(columns=['_sa_instance_state'], inplace=True)
 
-    # === Step 5: Convert each row into a BEsgActualScore ORM object ===
-    def process_row(row):
-        return BEsgActualScore(
-            Year=row['Year'],
-            company_name=row['Company_name'],
-            Environmental_Score=row['Environmental Score'],
-            Social_Score=row['Social Score'],
-            Governance_Score=row['Governance Score'],
-            ESG_Score=row['ESG Score'],
-            ESG_Rating=row['ESG Rating'],
-            ESG_Rank=row['ESG Rank'],
-            data_type='DEMO'
-        )
-    # Apply the function to each row
-    results = df.apply(process_row, axis=1)
-    # === Step 6: Bulk insert all scored records into the database ===
-    db.session.add_all(results)
-    db.session.commit()
-    # === Step 7: Format and return inserted record summaries ===
-    inserted_records = [
-        {
-            'id': record.id,
-            'Company_name': record.company_name,
-            'Year': record.Year,
-            'Environmental_Score': record.Environmental_Score,
-            'Social_Score': record.Social_Score,
-            'Governance_Score': record.Governance_Score,
-            'ESG_Score': record.ESG_Score,
-            'ESG_Rating': record.ESG_Rating,
-            'ESG_Rank': record.ESG_Rank,
-            'data_type': record.data_type,
-            'created_date': record.created_date.isoformat()  # Format the datetime
-        } for record in results
-    ]
+        # === Step 5: Convert each row into a BEsgActualScore ORM object ===
+        def process_row(row):
+            return BEsgActualScore(
+                Year=row['Year'],
+                company_name=row['Company_name'],
+                Environmental_Score=row['Environmental Score'],
+                Social_Score=row['Social Score'],
+                Governance_Score=row['Governance Score'],
+                ESG_Score=row['ESG Score'],
+                ESG_Rating=row['ESG Rating'],
+                ESG_Rank=row['ESG Rank'],
+                data_type='DEMO'
+            )
+        # Apply the function to each row
+        results = df.apply(process_row, axis=1)
+        # === Step 6: Bulk insert all scored records into the database ===
+        db.session.add_all(results)
+        db.session.commit()
+        # === Step 7: Format and return inserted record summaries ===
+        inserted_records = [
+            {
+                'id': record.id,
+                'Company_name': record.company_name,
+                'Year': record.Year,
+                'Environmental_Score': record.Environmental_Score,
+                'Social_Score': record.Social_Score,
+                'Governance_Score': record.Governance_Score,
+                'ESG_Score': record.ESG_Score,
+                'ESG_Rating': record.ESG_Rating,
+                'ESG_Rank': record.ESG_Rank,
+                'data_type': record.data_type,
+                'created_date': record.created_date.isoformat()  # Format the datetime
+            } for record in results
+        ]
 
-    return df, inserted_records
-    # return inserted_records
-
-    # return df.to_json(orient='records')  # Return as JSON
+        return df, inserted_records
+    except Exception as e:
+        print(str(e))
+        print(f'load_all_data fail for {year}')
+        return None, None
     

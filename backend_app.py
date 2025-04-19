@@ -121,9 +121,11 @@ def esg_score():
     report_year = data['report_year']
     print(f'report_year {report_year}')
     [df, output] = load_all_data(year=report_year)
-    run_clustering(df)
-    return jsonify(output), 200
-
+    if df is None:
+        return jsonify({"message": "No Data Found"}), 404
+    else:
+        run_clustering(df)
+        return jsonify(output), 200
 
 @app.route('/api/v1/esg/company', methods=['GET'])
 def retrieve_company_list():
