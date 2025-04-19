@@ -1,9 +1,37 @@
 def match_to_benchmark_topic(text, benchmark_topics):
+    """
+    Matches a given text snippet to the most relevant ESG benchmark topic.
+
+    Parameters:
+    text (str): The input text to analyze.
+    benchmark_topics (list of str): List of benchmark topic keywords or phrases.
+
+    Returns:
+    str: The first matched benchmark topic if found; otherwise, "Unaligned".
+    """
     text = text.lower()
     matches = [topic for topic in benchmark_topics if topic in text]
     return matches[0] if matches else "Unaligned"
 
 def detect_greenwashing_advanced(row, benchmark_topics):
+    """
+    Detects potential greenwashing in a given text snippet using multiple heuristic rules.
+
+    Criteria for flagging as potential greenwashing:
+    - Sentiment is highly positive (score > 0.85).
+    - Contains ESG-related buzzwords (e.g., 'sustainable', 'net zero').
+    - No numerical evidence/metrics in the statement.
+    - Mentions a valid ESG benchmark topic.
+
+    Parameters:
+    row (pd.Series): A row of a DataFrame containing 'Text Snippet', 'Sentiment Label', and 'Sentiment Score'.
+    benchmark_topics (list of str): List of ESG benchmark topics to validate alignment.
+
+    Returns:
+    tuple: ("Potential"/"No", matched_topic)
+           - "Potential" if criteria for greenwashing is met.
+           - "No" otherwise.
+    """
     text = row['Text Snippet'].lower()
     sentiment = row['Sentiment Label'].lower()
     score = row['Sentiment Score']

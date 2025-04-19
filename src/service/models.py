@@ -3,10 +3,11 @@ from typing import List, Optional
 from sqlalchemy import Column, ForeignKeyConstraint, Integer, LargeBinary, PrimaryKeyConstraint, String, Table, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
+# === Base class for declarative ORM models ===
 class Base(DeclarativeBase):
     pass
 
-
+# === Company Profile Table ===
 class CompanyProfile(Base):
     __tablename__ = 'company_profile'
     __table_args__ = (
@@ -20,9 +21,10 @@ class CompanyProfile(Base):
     company_name: Mapped[Optional[str]] = mapped_column(String(100))
     description: Mapped[Optional[str]] = mapped_column(String(500))
 
+    # One-to-many relationship to ReportHistory
     report_history: Mapped[List['ReportHistory']] = relationship('ReportHistory', back_populates='company_profile')
 
-
+# === ESG Index Metric Reference Table ===
 class EsgIndexMetric(Base):
     __tablename__ = 'esg_index_metric'
     __table_args__ = (
@@ -35,6 +37,7 @@ class EsgIndexMetric(Base):
     type: Mapped[Optional[str]] = mapped_column(String(20))
 
 
+# === Report History Table ===
 class ReportHistory(Base):
     __tablename__ = 'report_history'
     __table_args__ = (
@@ -50,9 +53,10 @@ class ReportHistory(Base):
     filereportlocation: Mapped[Optional[str]] = mapped_column(String(200))
     rawextractedtext: Mapped[Optional[bytes]] = mapped_column(LargeBinary)
 
+    # Many-to-one relationship to CompanyProfile
     company_profile: Mapped[Optional['CompanyProfile']] = relationship('CompanyProfile', back_populates='report_history')
 
-
+# === ESG Extracted Metric Data Association Table ===
 t_esg_extracted_metric_data = Table(
     'esg_extracted_metric_data', Base.metadata,
     Column('history_id', String(20)),
