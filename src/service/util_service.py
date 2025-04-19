@@ -2,11 +2,29 @@ from src.model.esg_models import db, CompanyProfile, BEsgFinancialMetrics, Repor
 
 
 def get_company_list():
+    """
+    Fetches a distinct list of all company names from the CompanyProfile table.
+
+    Returns:
+    List[str]: List of company names.
+    """
     companies = db.session.query(CompanyProfile.company_name).distinct().all()
     return [topic[0] for topic in companies]
 
 
 def get_esg_financial_metric():
+    """
+    Retrieves ESG-related financial metrics for all companies.
+
+    Returns:
+    List[Dict]: A list of dictionaries containing:
+        - company: str
+        - year: int
+        - ticker: str
+        - roa: float
+        - roe: float
+        - stockReturn: float
+    """
     data = db.session.query(BEsgFinancialMetrics).with_entities(
             BEsgFinancialMetrics.year,
             BEsgFinancialMetrics.company_name,
@@ -26,6 +44,17 @@ def get_esg_financial_metric():
     return metrics
 
 def get_esg_report_histopry():
+    """
+    Retrieves the history of ESG reports for all companies, ordered by the most recent upload.
+
+    Returns:
+    List[Dict]: A list of report history records with:
+        - created_date: datetime
+        - company_name: str
+        - year: int
+        - confidence_score: float
+        - url: str
+    """
     data = db.session.query(ReportHistory).with_entities(
             ReportHistory.year,
             ReportHistory.company_name,

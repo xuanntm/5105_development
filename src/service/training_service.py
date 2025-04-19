@@ -7,6 +7,26 @@ from src.model.esg_models import db, ReportHistory
 
 
 def load_esg_model(company_name, report_year):
+    """
+    Fine-tunes a SentenceTransformer model using ESG-related sentence pairs
+    extracted from a company's uploaded sustainability report.
+
+    The function:
+    1. Retrieves the most recent report for the specified company and year.
+    2. Simulates sentence pair training data from the report's text (synthetic similarity of 0.8).
+    3. Fine-tunes a pre-trained model using cosine similarity loss.
+    4. Saves the adapted model for ESG-specific applications (e.g., greenwashing detection).
+
+    Parameters:
+    company_name (str): The name of the company to load the report from.
+    report_year (int): The report year to locate the document.
+
+    Returns:
+    None
+
+    Exceptions:
+    Prints the error message if any part of the pipeline fails.
+    """
     try:
         # Step 1: Load the energy-sector ESG data
         # with open(f'{DATA_FOLDER_JSON}{company_name}{report_year}.json', 'r') as f:
