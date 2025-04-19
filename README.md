@@ -59,15 +59,9 @@ step to update DB endpoint:
 ## FrontEnd UI
 Project Structure
 
+![Uploading image.png…]()
 
-5105_development/
-├── UI/
-│   ├── login.py                       ← 👈 Main Streamlit entry point
-│   └── pages/
-│       └── ESG_GUI_Enhanced_NeonDB.py
-├── .env                               ← 🔐 Local secrets (never committed)
-├── requirements.txt
-└── README.md
+
 
 >1. Clone the Repository
 
