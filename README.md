@@ -56,20 +56,20 @@ step to update DB endpoint:
 - clean up cache $ unset SQLALCHEMY_DATABASE_URI
 - start backend app $ python backend_app.py
 
-FrontEnd UI
+## FrontEnd UI
 Project Structure
 
 
 >1. Clone the Repository
 
 >2.  Create and Activate a Virtual Environment
-  # Create
+  >Create
   python -m venv .venv
 
-  # Activate (macOS/Linux)
+  >Activate (macOS/Linux)
   source .venv/bin/activate
 
-  # Activate (Windows)
+  >Activate (Windows)
   .venv\Scripts\activate
 
 >3. Install Required Packages
