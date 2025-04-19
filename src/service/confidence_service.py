@@ -126,7 +126,37 @@ metric_dictionary = {
 }
 
 def calculate_confidence_scores(company_name, report_year):
+    """
+    Calculates semantic similarity-based confidence scores for extracted ESG metrics by comparing them
+    with expected metric names (aliases). Also updates the associated report history with the average score.
+
+    Workflow:
+    1. Fetch extracted ESG metric records for the given company and year.
+    2. Convert records into a DataFrame.
+    3. For each row:
+       - Encode the extracted metric using an embedding model.
+       - Compare it against a dictionary of expected metric aliases.
+       - Select the alias with the highest cosine similarity score.
+       - Flag if score is below a confidence threshold (e.g., 0.75).
+    4. Compute the average confidence score and update it in the `ReportHistory` table.
+
+    Parameters:
+    company_name (str): The name of the company for which metrics are being evaluated.
+    report_year (int): The report year of the ESG data.
+
+    Returns:
+    pd.DataFrame: A DataFrame of extracted metrics and their confidence scores.
+
+    Exceptions:
+    Logs and prints error messages if any part of the process fails.
+
+    Requirements:
+    - `confidence_model`: A sentence embedding model with `.encode()`.
+    - `metric_dictionary`: A dictionary mapping standard metric names to a list of aliases.
+    - `db`, `EsgExtractedMetricData`, `ReportHistory` should be pre-defined SQLAlchemy components.
+    """
     try:
+        # === Step 1: Fetch extracted ESG data for the specified company and year ===
         data = db.session.query(EsgExtractedMetricData).with_entities(
             EsgExtractedMetricData.pillar,
             EsgExtractedMetricData.metric,
@@ -134,6 +164,7 @@ def calculate_confidence_scores(company_name, report_year):
             EsgExtractedMetricData.extracted_value
         ).filter_by(company_name=company_name, year=report_year).all()
 
+        # === Step 2: Convert fetched rows into a structured DataFrame ===
         metrics = [{
             'Metric': row.metric, 
             'Extracted Metric': row.extracted_metric, 
@@ -144,6 +175,7 @@ def calculate_confidence_scores(company_name, report_year):
         print(df)
 
         results = []
+        # === Step 3: Calculate confidence scores for each extracted metric ===
         for idx, row in df.iterrows():
             metric = str(row.get('Metric', '')).strip()
             extracted = str(row.get('Extracted Metric', '')).strip()
@@ -169,8 +201,11 @@ def calculate_confidence_scores(company_name, report_year):
                     "Needs_Human_Review": best_score < 0.75
                 })
 
+        # === Step 4: Construct results DataFrame ===
         confidence_df = pd.DataFrame(results)
         # print(confidence_df)
+        
+        # === Step 5: Compute mean confidence score and update report history ===
         mean_score = confidence_df["Confidence_Score"].mean()
         record = ReportHistory.query.filter_by(company_name=company_name, year=report_year) \
             .order_by(ReportHistory.created_date.desc()).first()
