@@ -63,14 +63,14 @@ Project Structure
 >1. Clone the Repository
 
 >2.  Create and Activate a Virtual Environment
-  >Create
-  python -m venv .venv
+      >Create
+      python -m venv .venv
 
-  >Activate (macOS/Linux)
-  source .venv/bin/activate
+       Activate (macOS/Linux)
+    source .venv/bin/activate
 
-  >Activate (Windows)
-  .venv\Scripts\activate
+    >Activate (Windows)
+    .venv\Scripts\activate
 
 >3. Install Required Packages
 >4. In the root directory, create a .env file:
