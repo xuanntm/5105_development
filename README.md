@@ -60,6 +60,15 @@ step to update DB endpoint:
 Project Structure
 
 
+5105_development/
+├── UI/
+│   ├── login.py                       ← 👈 Main Streamlit entry point
+│   └── pages/
+│       └── ESG_GUI_Enhanced_NeonDB.py
+├── .env                               ← 🔐 Local secrets (never committed)
+├── requirements.txt
+└── README.md
+
 >1. Clone the Repository
 
 >2.  Create and Activate a Virtual Environment
