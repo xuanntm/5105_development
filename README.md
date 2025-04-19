@@ -57,9 +57,13 @@ step to update DB endpoint:
 - start backend app $ python backend_app.py
 
 ## FrontEnd UI
+![image](https://github.com/user-attachments/assets/320bc6f8-20f4-4049-b806-a705aca0b777)
+
+
 Project Structure
 
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/925c267a-9759-48bd-a957-2a6f10e04d27)
+
 
 
 
