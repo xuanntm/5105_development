@@ -12,10 +12,6 @@ This project aims to automate the extraction of ESG (Environmental, Social, Gove
 
 
 
-
-# What we do
-prerequisite thi
-
 ## 1.Install environment
 move to the folder where you want to work
 > 1. Clone code from github  
@@ -47,62 +43,15 @@ move to the folder where you want to work
 > b_esg_metric_data_extracted  
 > b_esg_with_trend_features  
 
-## 5.Run Streamlit UI app
+## 3.Run Streamlit UI app
 > $ streamlit run frontend_app.py  
 > Frontend endpoint : http://localhost:8501/
 
 
-## 6. switch db local <--> neondb
+## 4. switch db local <--> neondb
 
 step to update DB endpoint:
 - Stop current service (if it's running) : Ctrl+C
 - update .env with new value for SQLALCHEMY_DATABASE_URI
 - clean up cache $ unset SQLALCHEMY_DATABASE_URI
 - start backend app $ python backend_app.py
-
-
-pip install sqlacodegen
-sqlacodegen postgresql://username:password@localhost:5432/mydatabase --outfile models.py
-
-sqlacodegen postgresql://admin:admin@127.0.0.1:54320/postgres --schema esg --outfile esg_models.py
-
-
-sqlacodegen sqlite:////Users/XuanNguyen/Documents/NUS/DSS5105/esg.sqlite --outfile esg_sqlite_models.py
-
-sqlacodegen --generator tables sqlite:////Users/XuanNguyen/Documents/NUS/DSS5105/esg.sqlite --outfile esg_sqlite_models.py
-
-
-declarative, dataclasses, tables
-
-
-SQLALCHEMY_DATABASE_URI_bk=postgresql://admin:admin@127.0.0.1:54320/postgres
-
-SQLALCHEMY_DATABASE_URI=sqlite:////Users/XuanNguyen/Documents/NUS/DSS5105/esg.sqlite
-
-
-
-(Base) -> (db.Model)
-
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-
-
-docker rmi $(docker images -q my-python-app --filter "dangling=false" --filter "label!=keep") 2>/dev/null
-
-
-docker build -t my-python-app .
-
-docker build -t my-python-app:latest .
-docker run -p 5000:5000 my-python-app
-
-
-
-
-## 2.Run app
-## 3.Call internal API
-## 4.Build docker file
-
-# Calculate sentiment stats -> redundant?
-
-esg_sentiment_climatebert_ -> return no data
