@@ -19,17 +19,22 @@ move to the folder where you want to work
 > $ git clone https://github.com/xuanntm/5105_development.git
 > 2. Move to Git project  
 > $ cd 5105_development
-> 3. Create environment  
+> 3. Create environment
+>    Activate (macOS/Linux)
+    source .venv/bin/activate
+
+    >Activate (Windows)
+    .venv\Scripts\activate
 > $ python -m venv .venv  
 > $ source .venv/bin/activate  
 > $ pip install -r requirements.txt  
-> 4. Create .env file with the some config
+> 5. Create .env file with the some config
 > SQLALCHEMY_DATABASE_URI=postgresql://admin:admin@127.0.0.1:54320/postgres  
 > NEWSAPI_KEY={{YOUR_NEWS_API_KEY}}  
 > BING_API_KEY={{YOUR_BING_API_KEY}}  
-> 5. Download model  
+> 6. Download model  
 > $ python src/config/model_config.py
-> 6. Start environment  
+> 7. Start environment  
 > $ python backend_app.py  
 > Backend endpoint : http://localhost:5000/
  
