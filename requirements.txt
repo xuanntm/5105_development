@@ -18,3 +18,5 @@ nltk
 yfinance
 IPython
 streamlit
+openai
+dotenv
