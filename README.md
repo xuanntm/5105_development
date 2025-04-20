@@ -20,13 +20,15 @@ move to the folder where you want to work
 > 2. Move to Git project  
 > $ cd 5105_development
 > 3. Create environment
->    Activate (macOS/Linux)
+      >Create
+      python -m venv .venv
+
+       Activate (macOS/Linux)
     source .venv/bin/activate
 
     >Activate (Windows)
     .venv\Scripts\activate
-> $ python -m venv .venv  
-> $ source .venv/bin/activate  
+> $ python -m venv .venv    
 > $ pip install -r requirements.txt  
 > 5. Create .env file with the some config
 > SQLALCHEMY_DATABASE_URI=postgresql://admin:admin@127.0.0.1:54320/postgres  
@@ -77,14 +79,7 @@ Project Structure
 >1. Clone the Repository
 
 >2. Create and Activate a Virtual Environment
-      >Create
-      python -m venv .venv
 
-       Activate (macOS/Linux)
-    source .venv/bin/activate
-
-    >Activate (Windows)
-    .venv\Scripts\activate
 
 >3. Install Required Packages
 >4. In the root directory, create a .env file:
