@@ -13,5 +13,5 @@ This project focuses on automating the extraction of ESG (Environmental, Social,
 
 ⚙️ Backend Setup Instructions
 	1.	Clone the Repository
- git clone https://github.com/xuanntm/5105_development.git
-cd 5105_development
+ >git clone https://github.com/xuanntm/5105_development.git
+>cd 5105_development
