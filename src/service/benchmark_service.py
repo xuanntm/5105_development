@@ -13,6 +13,7 @@ def match_to_benchmark_topic(text, benchmark_topics):
     matches = [topic for topic in benchmark_topics if topic in text]
     return matches[0] if matches else "Unaligned"
 
+
 def detect_greenwashing_advanced(row, benchmark_topics):
     """
     Detects potential greenwashing in a given text snippet using multiple heuristic rules.

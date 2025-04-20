@@ -43,12 +43,8 @@ move to the folder where you want to work
 > b_esg_metric_data_extracted  
 > b_esg_with_trend_features  
 
-## 3.Run Streamlit UI app
-> $ streamlit run frontend_app.py  
-> Frontend endpoint : http://localhost:8501/
 
-
-## 4. switch db local <--> neondb
+## 3. switch db local <--> neondb
 
 step to update DB endpoint:
 - Stop current service (if it's running) : Ctrl+C

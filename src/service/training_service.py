@@ -1,8 +1,6 @@
 from sentence_transformers import SentenceTransformer, InputExample, losses
 from torch.utils.data import DataLoader
-import pandas as pd
-import json
-from src.model.esg_models import db, ReportHistory
+from src.model.esg_models import ReportHistory
 
 
 

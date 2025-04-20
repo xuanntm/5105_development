@@ -2,12 +2,9 @@ import requests
 import io
 import uuid
 import re
-import json
 import string
-from tqdm import tqdm
 from pdfminer.high_level import extract_text
 import spacy
-import os
 from langdetect import detect
 from googletrans import Translator
 from src.model.esg_models import db, ReportHistory

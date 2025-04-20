@@ -2,10 +2,9 @@ import yfinance as yf
 import pandas as pd
 import requests, json
 from bs4 import BeautifulSoup
-import numpy as np
-import matplotlib.pyplot as plt
 from IPython.display import display
 from src.model.esg_models import db, ExternalSource
+
 
 def get_ticker_symbol(company_name):
     """
@@ -34,6 +33,7 @@ def get_ticker_symbol(company_name):
     except Exception as e:
         print(f"Error retrieving ticker: {e}")
         return None
+
 
 def get_esg_score(company_name):
     """
@@ -72,68 +72,6 @@ def get_esg_score(company_name):
                                      "environmentScore", "esgPerformance", "percentile",
                                      "peerGroup", "highestControversy"], index=[ticker_symbol]).fillna("NA")
 
-
-def plot_esg_horizontal_chart(company_name, esg_scores):
-    """
-    Plots a normalized horizontal bar chart for ESG scores.
-
-    Args:
-        company_name (str): The name of the company
-        esg_scores (dict or pd.DataFrame): ESG scores for the company
-    """
-    # Convert DataFrame to dictionary if necessary
-    if isinstance(esg_scores, pd.DataFrame):
-        esg_scores = esg_scores.iloc[:, 0].to_dict()  # Convert first column to dictionary
-
-    # Ensure esg_scores is a dictionary
-    if not isinstance(esg_scores, dict):
-        raise TypeError(f"Expected esg_scores as a dictionary, but got {type(esg_scores)}.")
-
-    # Define expected categories and their max scales
-    max_scales = {
-        "totalEsg": 30,
-        "socialScore": 10,
-        "governanceScore": 10,
-        "environmentScore": 10,
-        "highestControversy": 4
-    }
-
-    # Rename category for aesthetic purposes
-    category_labels = {
-        "totalEsg": "Total ESG Risk Score",
-        "socialScore": "Social Risk Score",
-        "governanceScore": "Governance Risk Score",
-        "environmentScore": "Environment Risk Score",
-        "highestControversy": "Controversy Level"  # New label
-    }
-
-    # Ensure only expected categories are used, and fill missing ones with NaN
-    filtered_scores = {key: esg_scores.get(key, np.nan) for key in max_scales.keys()}
-
-    categories = [category_labels[key] for key in filtered_scores.keys()]
-    values = list(filtered_scores.values())
-
-    # Normalize values to a 0-100 scale, handling NaNs safely
-    normalized_values = [
-        (val / max_scales[cat]) * 100 if not np.isnan(val) else 0 for cat, val in filtered_scores.items()
-    ]
-
-    colors = ['purple', 'blue', 'red', 'green', 'orange']  # ESG metric colors
-
-    fig = plt.figure(figsize=(10, 5))
-    bars = plt.barh(categories, normalized_values, color=colors, label="Company ESG Score")
-
-    # Add labels inside the bars
-    for bar, (value, original_value, category, key) in zip(bars, zip(normalized_values, values, categories, filtered_scores.keys())):
-        plt.text(bar.get_width() - 5, bar.get_y() + bar.get_height()/2,
-                 f"{round(original_value, 2) if not np.isnan(original_value) else 'NA'} / {max_scales[key]}",
-                 va='center', ha='right', fontsize=12, color='white', fontweight='bold')
-
-    plt.xlim(0, 100)  # Fixed 0-100 scale
-    plt.xlabel("Score Percentage (%)")
-    plt.title(f"Yahoo Finance ESG Scores for {company_name}")
-    plt.show()
-    return fig
 
 def fetch_and_plot_esg_scores(company_name):
     try:

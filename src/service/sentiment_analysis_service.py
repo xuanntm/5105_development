@@ -1,4 +1,3 @@
-import pandas as pd
 from src.config.sentiment_analysis_config import sentiment_pipeline
 from src.model.esg_models import db, ReportHistory, EsgSentiment
 from src.service.benchmark_service import detect_greenwashing_advanced
@@ -33,60 +32,6 @@ def classify_esg_category(text):
             return category
     return "Uncategorized"
 
-# ESG JSON processor
-# def process_esg_reports(file_paths=['content/json/conocophillips2023.json']):
-#     results = []
-
-#     for file_path in file_paths:
-#         print(file_path)
-#         with open(file_path, 'r', encoding='utf-8') as f:
-#             data = json.load(f)
-
-#         company = data.get("company", "Unknown")
-#         year = data.get("year", "Unknown")
-#         chunks = [s["text"] for s in data.get("sentences", []) if len(s["text"].strip()) > 20]
-
-#         for chunk in chunks:
-#             short_text = chunk[:512]
-#             try:
-#                 sentiment = sentiment_pipeline(short_text)[0]
-#                 label = sentiment["label"]
-#                 score = sentiment["score"]
-#             except Exception as e:
-#                 label = "Error"
-#                 score = 0.0
-
-#             esg_cat = classify_esg_category(short_text)
-
-#             results.append({
-#                 "Company": company,
-#                 "Year": year,
-#                 "ESG Category": esg_cat,
-#                 "Sentiment Label": label,
-#                 "Sentiment Score": score,
-#                 "Text Snippet": short_text[:150] + "..."
-#             })
-
-#     return pd.DataFrame(results)
-
-
-#     # Calculate sentiment stats
-#     if not df.empty:
-#         avg_score = df["Sentiment Score"].mean()
-#         sentiment_counts = df["Sentiment Label"].value_counts(normalize=True) * 100
-#         positive_pct = sentiment_counts.get("positive", 0)
-#         negative_pct = sentiment_counts.get("negative", 0)
-#         neutral_pct = sentiment_counts.get("neutral", 0)
-
-#         print(f"Average Sentiment Score: {avg_score:.4f}")
-#         print(f"Sentiment Distribution:\n"
-#               f"  Positive: {positive_pct:.2f}%\n"
-#               f"  Negative: {negative_pct:.2f}%\n"
-#               f"  Neutral : {neutral_pct:.2f}%")
-#     else:
-#         print("No valid sentiment data found.")
-
-#     return df
 
 # ESG keyword classifier
 def classify_esg_category(text):

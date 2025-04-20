@@ -19,4 +19,3 @@ yfinance
 IPython
 streamlit
 openai
-dotenv
