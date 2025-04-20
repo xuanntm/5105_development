@@ -92,8 +92,8 @@ Project Structure
 > - Modular pipeline integration across components of Data Science Project
 > - Adaptation to the energy domain with ESG metrics
 > - External data made ESG profiles more robust
-> - Additional features: Dashboard with Chatbot, User authentication
 > - Implementation microservices
+## $ Additional features: Dashboard with Chatbot, User authentication
 
 #### Disclaimer 
 > For the testing purpose backend connect with localdb and frontend connect with neondb. The migration from local DB to neondb is required to streamline backend and frontend testing.
