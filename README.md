@@ -7,6 +7,7 @@
 ## 📘 Project Overview
 
 This project focuses on automating the extraction of ESG (Environmental, Social, and Governance) insights from unstructured corporate reports using advanced NLP techniques. It supports ESG analysts, investors, and regulators by enhancing the speed, accuracy, and usability of ESG data, offering industry-aligned benchmarking and interactive dashboards for performance insights.
+Video: https://www.youtube.com/watch?v=yNcdobaMEGo
 
 ---
 
