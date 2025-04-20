@@ -24,7 +24,7 @@ import psycopg2
 from sqlalchemy.dialects.postgresql import insert
 import sqlalchemy
 from sqlalchemy import text
-
+import unicodedata
 
 # Load environment variables
 load_dotenv()
@@ -504,108 +504,119 @@ if st.session_state.get("show_home", False):
     cluster_df = pd.read_sql("SELECT * FROM b_esg_cluster_analyis_actual WHERE data_type = 'actual'", engine)
 
     # --- Cluster Insights ---
-    st.markdown("<h3 style='text-align: center; text-transform: none;'>🤖 Cluster Insights</h3>", unsafe_allow_html=True)
+    #st.markdown("<h3 style='text-align: center; text-transform: none;'>🤖 Cluster Insights</h3>", unsafe_allow_html=True)
 
-    try:
-        # Initialize OpenAI client (v1.x style)
-        client = os.getenv("OPENAI_API_KEY")
+    # try:
+    #     # Initialize OpenAI client (v1.x style)
+    #     api_key = os.getenv("OPENAI_API_KEY")
+    #     client = OpenAI(api_key=api_key)
+    #     #client = os.getenv("OPENAI_API_KEY")
 
-        # Group by cluster and compute mean
-        cluster_summary = cluster_df.groupby("Cluster").mean(numeric_only=True).reset_index()
-        summary_str = cluster_summary.to_string(index=False)
-
-        # Prompt construction
-        prompt = (
-            "You are an ESG data analyst. Based on the ESG cluster summary below, "
-            "do the cluster analysis summary and provide insights which area they are lagging and how to improve"
-            "Return each insight on a separate line in this format:\n\n"
-            "Cluster 0: <one-line insight>\n"
-            "Cluster 1: <one-line insight>\n"
-            "Cluster 2: <one-line insight>\n\n"
-            f"{summary_str}"
-        )
-
-        # GPT-4 call
-        response = client.chat.completions.create(
-            model="gpt-4",
-            max_tokens=250,
-            temperature=0.5,
-            messages=[
-                {"role": "system", "content": "You are a concise ESG data analyst."},
-                {"role": "user", "content": prompt}
-            ]
-        )
-
-        # Display insights
-        cluster_insight = response.choices[0].message.content.strip()
-
-        st.markdown("✅ **AI-generated insights below:**")
-        st.markdown(f"""
-            <div style='
-                background-color: #f0f2f6;
-                padding: 1rem;
-                margin-top: 0.5rem;
-                border-radius: 10px;
-                max-width: 1200px;
-                margin-left: auto;
-                margin-right: auto;
-                font-size: 18px;
-                line-height: 1.6;
-                color: #000;
-                white-space: pre-wrap;
-                word-wrap: break-word;
-                text-align: left;
-            '>{cluster_insight}</div>
-        """, unsafe_allow_html=True)
+    #     def sanitize_prompt(text):
+    #         return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
         
-        # --- Fix the 'Year' formatting and drop 'id' column ---
-        cluster_summary['Year'] = cluster_summary['Year'].astype(int)  # No decimal points
-        if 'id' in cluster_summary.columns:
-            cluster_summary.drop(columns=['id'], inplace=True)
+    #     # Group by cluster and compute mean
+    #     cluster_summary = cluster_df.groupby("Cluster").mean(numeric_only=True).reset_index()
+    #     summary_str = cluster_summary.to_string(index=False)
+    #     summary_str_clean = sanitize_prompt(summary_str)
+        
+    #     # Prompt construction
+    #     raw_prompt = (
+    #         "You are an ESG data analyst. Based on the ESG cluster summary below, "
+    #         "do the cluster analysis summary and provide insights which area they are lagging and how to improve. "
+    #         "Return each insight on a separate line in this format:\n\n"
+    #         "Cluster 0: <one-line insight>\n"
+    #         "Cluster 1: <one-line insight>\n"
+    #         "Cluster 2: <one-line insight>\n\n"
+    #         f"{summary_str_clean}"
+    #     )
+        
+    #     prompt = sanitize_prompt(raw_prompt)
 
-        # Round all columns except 'Cluster' and 'Year'
-        cols_to_round = [col for col in cluster_summary.columns if col not in ['Cluster', 'Year']]
-        cluster_summary[cols_to_round] = cluster_summary[cols_to_round].round(2)
+    #     # GPT-4 call
+    #     #prompt = prompt.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+    #     response = client.chat.completions.create(
+    #         model="gpt-4",
+    #         max_tokens=250,
+    #         temperature=0.5,
+    #         messages=[
+    #             {"role": "system", "content": "You are a concise ESG data analyst."},
+    #             {"role": "user", "content": prompt}
+    #         ]
+    #     )
+    #     # (Optional) Display the result
+    #     print(response.choices[0].message.content)
 
-        # ---------- Custom CSS for max width and table style ----------
-        st.markdown("""
-            <style>
-                .streamlit-expander, .element-container, .stDataFrameContainer {
-                    max-width: 1200px !important;
-                    margin: auto;
-                }
-                table {
-                    border-collapse: collapse;
-                    width: 100%;
-                }
-                th, td {
-                    border: 2px solid #333333 !important;
-                    padding: 8px;
-                    text-align: center;
-                    color: black !important;
-                }
-            </style>
-        """, unsafe_allow_html=True)
+    #     # Display insights
+    #     cluster_insight = response.choices[0].message.content.strip()
 
-        # ---------- ESG Cluster Summary Header ----------
-        st.markdown("""
-            <div style='max-width: 1200px; margin: auto;'>
-                <h3 style='text-align: center; text-transform: none;'>📊 ESG Cluster Summary</h3>
-            </div>
-        """, unsafe_allow_html=True)
+    #     st.markdown("✅ **AI-generated insights below:**")
+    #     st.markdown(f"""
+    #         <div style='
+    #             background-color: #f0f2f6;
+    #             padding: 1rem;
+    #             margin-top: 0.5rem;
+    #             border-radius: 10px;
+    #             max-width: 1200px;
+    #             margin-left: auto;
+    #             margin-right: auto;
+    #             font-size: 18px;
+    #             line-height: 1.6;
+    #             color: #000;
+    #             white-space: pre-wrap;
+    #             word-wrap: break-word;
+    #             text-align: left;
+    #         '>{cluster_insight}</div>
+    #     """, unsafe_allow_html=True)
+        
+    #     # --- Fix the 'Year' formatting and drop 'id' column ---
+    #     cluster_summary['Year'] = cluster_summary['Year'].astype(int)  # No decimal points
+    #     if 'id' in cluster_summary.columns:
+    #         cluster_summary.drop(columns=['id'], inplace=True)
 
-        # ---------- Display Table with Styling ----------
-        st.markdown("<div style='max-width: 1200px; margin: auto;'>", unsafe_allow_html=True)
-        st.table(cluster_summary)  # You can use st.dataframe(cluster_summary) for interactivity
-        st.markdown("</div>", unsafe_allow_html=True)
+    #     # Round all columns except 'Cluster' and 'Year'
+    #     cols_to_round = [col for col in cluster_summary.columns if col not in ['Cluster', 'Year']]
+    #     cluster_summary[cols_to_round] = cluster_summary[cols_to_round].round(2)
+
+    #     # ---------- Custom CSS for max width and table style ----------
+    #     st.markdown("""
+    #         <style>
+    #             .streamlit-expander, .element-container, .stDataFrameContainer {
+    #                 max-width: 1200px !important;
+    #                 margin: auto;
+    #             }
+    #             table {
+    #                 border-collapse: collapse;
+    #                 width: 100%;
+    #             }
+    #             th, td {
+    #                 border: 2px solid #333333 !important;
+    #                 padding: 8px;
+    #                 text-align: center;
+    #                 color: black !important;
+    #             }
+    #         </style>
+    #     """, unsafe_allow_html=True)
+
+    #     # ---------- ESG Cluster Summary Header ----------
+    #     st.markdown("""
+    #         <div style='max-width: 1200px; margin: auto;'>
+    #             <h3 style='text-align: center; text-transform: none;'>📊 ESG Cluster Summary</h3>
+    #         </div>
+    #     """, unsafe_allow_html=True)
+
+    #     # ---------- Display Table with Styling ----------
+    #     st.markdown("<div style='max-width: 1200px; margin: auto;'>", unsafe_allow_html=True)
+    #     st.table(cluster_summary)  # You can use st.dataframe(cluster_summary) for interactivity
+    #     st.markdown("</div>", unsafe_allow_html=True)
 
 
         
-    except Exception as e:
-        st.warning("⚠️ Could not fetch AI insights. Please check your OpenAI API key or internet connection.")
-        st.exception(e)
+    # except Exception as e:
+    #     st.warning("⚠️ Could not fetch AI insights. Please check your OpenAI API key or internet connection.")
+    #     st.exception(e)
         
-    st.markdown("---")
+    # st.markdown("---")
 # ----------------- ESG PERFORMANCE BY COMPANY PAGE -----------------
     st.markdown("<h3 style='text-align: center; text-transform: none;'>🧭 Clustered ESG Company View</h3>", unsafe_allow_html=True)
     # Load the CSV
@@ -914,7 +925,7 @@ if st.session_state.get("show_company_performance", False):
 
             # --- ESG ChatGPT-Style Insight (Company-Level) ---
             # --- GPT Insight for Individual Company ESG Scores ---
-            st.markdown("<h3 style='text-align:center; text-transform: none;'>🧠 Company ESG Insight</h3>", unsafe_allow_html=True)
+            #st.markdown("<h3 style='text-align:center; text-transform: none;'>🧠 Company ESG Insight</h3>", unsafe_allow_html=True)
 
             # Format company ESG metrics for prompting
             company_summary_str = (
@@ -934,48 +945,48 @@ if st.session_state.get("show_company_performance", False):
                 f"{company_summary_str}"
             )
 
-            try:
-                client = os.getenv("OPENAI_API_KEY")
-                #GPT-4 call (same structure as cluster insight block)
-                response = client.chat.completions.create(
-                    model="gpt-4",
-                    max_tokens=250,
-                    temperature=0.5,
-                    messages=[
-                        {"role": "system", "content": "You are a concise ESG data analyst."},
-                        {"role": "user", "content": company_prompt}
-                    ]
-                )
+            # try:
+            #     client = os.getenv("OPENAI_API_KEY")
+            #     #GPT-4 call (same structure as cluster insight block)
+            #     response = client.chat.completions.create(
+            #         model="gpt-4",
+            #         max_tokens=250,
+            #         temperature=0.5,
+            #         messages=[
+            #             {"role": "system", "content": "You are a concise ESG data analyst."},
+            #             {"role": "user", "content": company_prompt}
+            #         ]
+            #     )
 
-                # Display insight
-                insight = response.choices[0].message.content.strip()
+            #     # Display insight
+            #     insight = response.choices[0].message.content.strip()
 
-                st.markdown("✅ **AI-generated insight below:**")
-                st.markdown(f"""
-                    <div style='
-                        background-color: #f0f2f6;
-                        padding: 1rem;
-                        margin-top: 0.5rem;
-                        border-radius: 10px;
-                        max-width: 1200px;
-                        margin-left: auto;
-                        margin-right: auto;
-                        font-size: 18px;
-                        line-height: 1.6;
-                        color: #000;
-                        white-space: pre-wrap;
-                        word-wrap: break-word;
-                        text-align: left;
-                    '>{insight}</div>
-                """, unsafe_allow_html=True)
+            #     st.markdown("✅ **AI-generated insight below:**")
+            #     st.markdown(f"""
+            #         <div style='
+            #             background-color: #f0f2f6;
+            #             padding: 1rem;
+            #             margin-top: 0.5rem;
+            #             border-radius: 10px;
+            #             max-width: 1200px;
+            #             margin-left: auto;
+            #             margin-right: auto;
+            #             font-size: 18px;
+            #             line-height: 1.6;
+            #             color: #000;
+            #             white-space: pre-wrap;
+            #             word-wrap: break-word;
+            #             text-align: left;
+            #         '>{insight}</div>
+            #     """, unsafe_allow_html=True)
 
-            except Exception as e:
-                st.warning("⚠️ Could not fetch company-level insight. Please check your OpenAI API key.")
-                st.exception(e)
+            # except Exception as e:
+            #     st.warning("⚠️ Could not fetch company-level insight. Please check your OpenAI API key.")
+            #     st.exception(e)
 
 
 
-            st.markdown("---")
+            # st.markdown("---")
 
             st.markdown("<h3 style='text-align: center; text-transform: none;'>🌍 ESG Pillar Scores</h3>", unsafe_allow_html=True)
             # Bar chart visualization with custom ESG colors
@@ -1739,7 +1750,7 @@ if st.session_state.get("show_company_performance", False):
     # Function to initialize the database connection with better error handling for sentiment and greenwashing
     def get_sentiment_connection():
         try:
-            conn = psycopg2.connect(DATABASE_URL)  # Using db URL directly or replace with your connection details
+            conn = psycopg2.connect(DB_URL)  # Using db URL directly or replace with your connection details
             return conn
         except psycopg2.OperationalError as e:
             st.error(f"Error connecting to the database: {e}")
@@ -2021,27 +2032,27 @@ def respond_to_query_with_gpt(query):
     score_text = df_summary_scores.to_markdown(index=False)
     metric_text = df_summary_metrics.to_markdown(index=False)
 
-    # Construct prompt
-    prompt = (
-        "You are an ESG data analyst. Use the ESG performance data below to respond factually to user queries.\n\n"
-        "### ESG Score Snapshot (Top 5 companies):\n"
-        f"{score_text}\n\n"
-        "### ESG Metrics Snapshot (Top 3 rows):\n"
-        f"{metric_text}\n\n"
-        f"User Query: {query}"
-    )
+    # # Construct prompt
+    # prompt = (
+    #     "You are an ESG data analyst. Use the ESG performance data below to respond factually to user queries.\n\n"
+    #     "### ESG Score Snapshot (Top 5 companies):\n"
+    #     f"{score_text}\n\n"
+    #     "### ESG Metrics Snapshot (Top 3 rows):\n"
+    #     f"{metric_text}\n\n"
+    #     f"User Query: {query}"
+    # )
 
-    # Query GPT
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "Answer using only the ESG data provided. Be concise and analytical."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.4,
-        max_tokens=200
-    )
-    return response.choices[0].message.content.strip()
+    # # Query GPT
+    # response = client.chat.completions.create(
+    #     model="gpt-4",
+    #     messages=[
+    #         {"role": "system", "content": "Answer using only the ESG data provided. Be concise and analytical."},
+    #         {"role": "user", "content": prompt}
+    #     ],
+    #     temperature=0.4,
+    #     max_tokens=200
+    # )
+    # return response.choices[0].message.content.strip()
 
 # Display previous messages
 for msg in st.session_state.messages:
