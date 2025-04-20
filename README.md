@@ -114,7 +114,7 @@ This project focuses on automating the extraction of ESG (Environmental, Social,
 - ESG metric extraction tailored to the energy sector
 - External trend and news integration for profile enhancement
 - Microservices implementation for backend modularity
-- Integrated dashboard with:
+# Integrated dashboard with:
   - ESG performance insights
   - Chatbot assistance
   - User authentication
