@@ -20,14 +20,11 @@ move to the folder where you want to work
 > 2. Move to Git project  
 > $ cd 5105_development
 > 3. Create environment
->Create
-python -m venv .venv
+ >Activate (macOS/Linux)
+ >source .venv/bin/activate
 
->Activate (macOS/Linux)
->source .venv/bin/activate
-
->Activate (Windows)
->.venv\Scripts\activate
+ >Activate (Windows)
+ >.venv\Scripts\activate
 > $ python -m venv .venv    
 > 4. pip install -r requirements.txt  
 > 5. Create .env file with the some config
