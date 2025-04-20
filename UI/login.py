@@ -8,12 +8,97 @@ import time
 from flask import Flask, request, jsonify
 import psycopg2
 import os
+import dotenv
+from dotenv import load_dotenv
+load_dotenv()
 
 st.set_page_config(page_title="CTRL+Sustain ESG Dashboard", page_icon="🌱", layout="wide")
+# Hide Streamlit's default page navigation (for multi-page apps)
+st.markdown("""
+    <style>
+    [data-testid="stSidebarNav"] {
+        display: none;
+    }
+    </style>
+""", unsafe_allow_html=True)
+# Custom Fonts, Layout, and ESG Background Gradient
+st.markdown("""
+<style>
+    html, body, [class*="css"]  {
+        font-family: 'Lato', sans-serif;
+        height: 100%;
+        margin: 0;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Lato', sans-serif;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    .ctrl-title {
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 26px !important;
+        font-weight: 700 !important;
+        color: #2c3e50 !important;
+    }
+    .ctrl-caption {
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        color: #4CAF50 !important;
+        margin-top: -10px !important;
+    }
+    .block-container {
+        padding-top: 2rem;
+    }
+    .stApp {
+        background: linear-gradient(135deg,#a8e6cf, #cce5ff, #b3b3ff);
+        background-size: 180% 180%;
+        animation: gradientBG 10s ease infinite;
+    }
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .login-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 100px;
+    }
+    .sidebar-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .centered-subheader {
+        text-align: center !important;
+        font-size: 30px !important;
+        font-family: 'Poppins', sans-serif !important;
+    }
+    .streamlit-expanderHeader, .stTextInput > div > input, .stPassword > div > input, .stButton > button {
+        font-size: 18px !important;
+    }
+    .stRadio > div[role="radiogroup"] > label {
+        font-size: 20px !important;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif !important;
+        margin-bottom: 8px;
+    }
+    .button-center {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # ------------------------ DB CONNECTION ------------------------ #
-DB_URL = os.getenv('DATABASE_URL')
 
+DB_URL = os.getenv('DATABASE_URL')
 def get_neon_connection():
     return psycopg2.connect(DB_URL)
 
@@ -82,9 +167,10 @@ with st.sidebar:
 
 # ------------------------ LOGIN FLOW ------------------------ #
 if menu == "Login" and not st.session_state.logged_in:
-    st.subheader("🔐 Login")
+    st.markdown("<h2 class='centered-subheader'>🔐 Login</h2>", unsafe_allow_html=True)
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
+    st.markdown("<div class='button-center'>", unsafe_allow_html=True)
     if st.button("Login"):
         res = requests.post("http://127.0.0.1:5000/login", json={"username": username, "password": password})
         if res.status_code == 200:
@@ -95,9 +181,11 @@ if menu == "Login" and not st.session_state.logged_in:
             st.rerun()
         else:
             st.error("❌ " + res.json().get("message"))
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 elif menu == "Register" and not st.session_state.logged_in:
-    st.subheader("📝 Register")
+    st.markdown("<h2 class='centered-subheader'>📝 Register</h2>", unsafe_allow_html=True)
     new_user = st.text_input("New Username")
     new_pass = st.text_input("New Password", type="password")
     if st.button("Register"):
