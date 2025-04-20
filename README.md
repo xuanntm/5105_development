@@ -6,13 +6,14 @@ Semester 2, AY2024/25
 
 ⸻
 
-📘 Project Overview
+## 📘 Project Overview
 
 This project aims to automate the extraction of ESG (Environmental, Social, Governance) insights from unstructured company reports using advanced NLP techniques, and provide performance analysis based on industry benchmarks. The system supports ESG analysts, investors, and regulators by making ESG data extraction faster, more reliable, and more actionable.
 
 
 
-## 1.Install environment
+## Config for Backend
+install environment
 move to the folder where you want to work
 > 1. Clone code from github  
 > $ git clone https://github.com/xuanntm/5105_development.git
@@ -31,26 +32,31 @@ move to the folder where you want to work
 > 6. Start environment  
 > $ python backend_app.py  
 > Backend endpoint : http://localhost:5000/
-> 7. 
-## 2.Install DB or create DB from script.
-> 1. Dictionary table  
-> esg_index_metric  
-> esg_benchmark  
-> company_profile  
-> b_esg_cluster_analyis_actual_demo  
-> b_esg_financial_metrics  
-> b_esg_merged_financial_metrics  
-> b_esg_metric_data_extracted  
-> b_esg_with_trend_features  
+ 
+
+Install DB or create DB from script.
+> 1. Dictionary tables  
+> - esg_index_metric  
+> - esg_benchmark  
+> - company_profile  
+> - b_esg_cluster_analyis_actual_demo  
+> - b_esg_financial_metrics  
+> - b_esg_merged_financial_metrics  
+> - b_esg_metric_data_extracted  
+> - b_esg_with_trend_features  
+> 2. Data output tables
+> - report_history
+> - external_source
+> - esg_sentiment
+> - esg_news
+> - b_esg_actual_score
 
 
-## 3. switch db local <--> neondb
-
-step to update DB endpoint:
-- Stop current service (if it's running) : Ctrl+C
-- update .env with new value for SQLALCHEMY_DATABASE_URI
-- clean up cache $ unset SQLALCHEMY_DATABASE_URI
-- start backend app $ python backend_app.py
+if switch db local <--> neondb, follow these steps to update DB endpoint:
+> - Stop current service (if it's running) : Ctrl+C
+> - update .env with new value for SQLALCHEMY_DATABASE_URI
+> - clean up cache $ unset SQLALCHEMY_DATABASE_URI
+> - start backend app $ python backend_app.py
 
 ## FrontEnd UI
 ![image](https://github.com/user-attachments/assets/320bc6f8-20f4-4049-b806-a705aca0b777)
@@ -85,3 +91,12 @@ Project Structure
        >cd UI
        >streamlit run login.py
 
+## Summary 
+> - Modular pipeline integration across components of Data Science Project
+> - Adaptation to the energy domain with ESG metrics
+> - External data made ESG profiles more robust
+> - Additional features: Dashboard with Chatbot, User authentication
+> - Implementation microservices
+
+#### Disclaimer 
+> For the testing purpose backend connect with localdb and frontend connect with neondb. The migration from local DB to neondb is required to streamline backend and frontend testing.
