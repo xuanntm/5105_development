@@ -2,36 +2,6 @@ from src.config.sentiment_analysis_config import sentiment_pipeline
 from src.model.esg_models import db, ReportHistory, EsgSentiment
 from src.service.benchmark_service import detect_greenwashing_advanced
 
-# ESG keyword classifier
-def classify_esg_category(text):
-    categories = {
-        "Environment": ["carbon", "co2", "emissions", "ghg", "climate", "energy", "efficiency", "renewable",
-        "solar", "wind", "geothermal", "hydropower", "footprint", "pollution", "waste",
-        "air quality", "toxic waste", "water", "water consumption", "water waste",
-        "electronic waste", "land use", "land restored", "biodiversity", "biodiversity impacts",
-        "packaging material waste", "hydrocarbon spills",
-        "air pollutant", "nox", "sox", "pm10", "voc", "scope 1", "scope 2", "scope 3",
-        "net-zero", "decarbonization", "ecological"
-        ],
-        "Social": ["diversity", "inclusion", "equity", "equality", "labour", "union", "human rights",
-        "training", "third party audits", "community", "health", "safety", "fatality", "incident", "trir",
-        "feedback scores", "grievance mechanisms", "stakeholder", "wellbeing", "education",
-        "philanthropy", "volunteer", "gender", "minorities", "social impact", "accessibility"
-        ],
-        "Governance": ["board diversity", "board independence", "voting rights", "accountability",
-        "governance", "risk management", "audit", "compliance", "transparency",
-        "ethics", "whistleblowing", "corruption", "anti-bribery",
-        "remuneration", "pay", "executive pay", "cybersecurity", "data privacy",
-        "accounting disclosure", "tax transparency",
-        "clear tax strategy", "governance framework", "independent", "esg committee"
-        ]
-    }
-    text_lower = text.lower()
-    for category, keywords in categories.items():
-        if any(keyword in text_lower for keyword in keywords):
-            return category
-    return "Uncategorized"
-
 
 # ESG keyword classifier
 def classify_esg_category(text):
@@ -62,6 +32,7 @@ def classify_esg_category(text):
         if any(keyword in text_lower for keyword in keywords):
             return category
     return "Uncategorized"
+
 
 # ESG JSON processor
 def process_esg_reports(company, year, benchmark_topics):
