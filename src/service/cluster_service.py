@@ -5,11 +5,11 @@ from src.model.esg_models import db, BEsgClusterAnalyisActual
 
 def run_clustering(df):
     """
-    Performs PCA and KMeans clustering on ESG data and saves results to CSV.
+    Performs PCA and KMeans clustering on ESG data and saves results to DB.
 
     Parameters:
     - df: DataFrame with ESG scores
-    - output_path: Path to save clustered CSV
+    - output_path: Path to save clustered DB
     - show_plot: Whether to display the PCA scatter plot
 
     Returns:
